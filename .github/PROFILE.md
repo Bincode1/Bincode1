@@ -1,13 +1,37 @@
 # Profile maintenance
 
-Edit `profile.json`, then run `python build_readme.py`. The README keeps the original greeting, native GitHub typography, About me, project links and contribution animation.
+The profile follows the approved paper-and-pencil design: cream paper, olive ink, coral accents, a taped avatar, hand-drawn headings, three linked project rows and a public contribution circuit. The visible title is simply `Activity`; do not add the removed Chinese label.
 
-Technology icons are vendored from Devicon and project symbols from Lucide. Their exact source revisions, file hashes and any modifications are in `assets/icons/SOURCES.json`; both licenses are included alongside the files. Run `python scripts/download_icons.py` only when intentionally refreshing those assets.
+GitHub removes custom HTML styles and scripts from READMEs. The artwork is therefore self-contained SVG, with separate desktop/mobile and light/dark variants selected by native `<picture>` sources. Each project is a real HTML link around its image. Image alt text preserves project descriptions and the About me content for screen readers. There are no remote image badges, external font requests or embedded scripts.
 
-The Activity images retain the real public-profile calendar and snake route from Platane/snk. `scripts/style_activity.py` applies light and dark palettes, removes the bottom meter and slows the loop to 32 seconds. Contribution cells keep their original level colors throughout the loop; the snake moves over the grid without erasing it. Reduced-motion viewers get the static contribution calendar. The workflow refreshes every hour at minute 17, and supports manual dispatch on a preview branch. GitHub may delay scheduled runs and contribution indexing, so this is not a real-time commit feed.
+## Updating content
 
-After fetching a new source, the workflow passes its UTC generation time to the styling script. The script writes `assets/activity.json` with that time, source hash and calendar cell counts, then the workflow regenerates the README to show the time in UTC+8. Restyling an older SVG without `--generated-at` never advances the displayed source time. Only the default branch receives scheduled runs; a draft branch must be refreshed manually.
+Edit `profile.json`, then run:
 
-The workflow uses the repository's default GitHub token. Its calendar reflects the user's public profile visibility settings; private activity visible only to the signed-in owner is not assumed to be public and is not copied from the owner's browser session.
+```sh
+python build_readme.py
+python -m unittest discover -s tests -v
+```
 
-Project descriptions are based on the public repository READMEs. The old BiliBrain-Python link has been replaced with the current MediaMind repository. Preview changes before merging, especially the project table at 320px and the Activity picture in both GitHub themes.
+This rebuilds `README.md` and `assets/profile/*.svg`. Commit source and generated artwork together. Preview both themes at desktop and phone widths. `scripts/render_artwork.py` owns the palette, spacing and drawing geometry.
+
+Technology icons are vendored Devicon files; project symbols are Lucide. Exact source revisions, hashes and licenses are in `assets/icons/`. The avatar is bundled in `assets/avatar.jpg`.
+
+Text uses LXGW WenKai and Caveat outlines, so readers do not need either font installed. Font licenses and provenance are in `assets/type/`. `glyphs.json` includes the current copy and printable ASCII. For new Chinese characters, install the optional authoring tool `fonttools`, download the two licensed fonts from the documented sources, then run:
+
+```sh
+python scripts/compile_glyphs.py /path/to/LXGWWenKai-Regular.ttf /path/to/Caveat.ttf
+python build_readme.py
+```
+
+Hourly generation requires only the Python standard library, not FontTools or system fonts.
+
+## Public contribution refresh
+
+`.github/workflows/profile.yml` runs hourly at minute 17, on relevant source changes and on manual dispatch. It runs the tests, fetches the **unauthenticated public** calendar from `https://github.com/users/Bincode1/contributions`, and then regenerates all artwork. It never sends an authorization header or copies the owner's signed-in private activity.
+
+`scripts/style_activity.py` parses the actual dates, counts and contribution levels. It checks for a complete, contiguous year and recognizable counts before replacing artwork. A partial response, login page or rate limit fails the workflow instead of publishing an empty map. Nodes retain their intensity throughout the animation; only a warm pulse moves along the connecting line. Reduced-motion readers see a static map. Every day, count and level is retained in `assets/activity.json` and in the SVG data attributes.
+
+The fetch time is recorded in UTC and shown in UTC+8 below Activity. Restyling a saved source without an explicit source timestamp never advances that time. GitHub can delay scheduled jobs and contribution indexing, so this is an hourly snapshot, not a real-time commit feed. Only the default branch receives scheduled runs.
+
+The old README and snake workflows have been consolidated into this single workflow, avoiding two bots writing the same README concurrently.

@@ -1,11 +1,12 @@
 {
   "github_username": "Bincode1",
   "display_name": "Bincode1",
-  "about": [
-    "一个还在持续学习的程序员。",
-    "主要学习和实践 Java、Python、Vue。",
-    "最近在做 AI Agent、RAG 和网页生成。"
-  ],
+  "about": {
+    "languages": ["Java", "Python"],
+    "frontend": ["Vue", "TypeScript"],
+    "focus": ["AI Agent", "RAG"],
+    "introduction": "一个还在持续学习的程序员。"
+  },
   "skills": [
     { "label": "Java", "icon": "java" },
     { "label": "Python", "icon": "python" },

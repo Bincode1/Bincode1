@@ -1,80 +1,107 @@
-"""Restyle a real snk output, keeping its calendar and computed snake route."""
-import re
+"""Fetch the unauthenticated public GitHub calendar and render contribution artwork."""
 import argparse
+from datetime import date, datetime, timedelta, timezone
 import hashlib
+from html.parser import HTMLParser
 import json
-from datetime import datetime
-import sys
-import xml.etree.ElementTree as ET
 from pathlib import Path
+import re
+import sys
+from urllib.request import Request, urlopen
 
-ET.register_namespace('', 'http://www.w3.org/2000/svg')
-NS = '{http://www.w3.org/2000/svg}'
 ROOT = Path(__file__).resolve().parents[1]
-PALETTES = {
-    'light': ['#d8dee4', '#57606a', '#eff2f5', '#eff2f5', '#d6e9df', '#a0cdb3', '#65a985', '#357454'],
-    'dark': ['#242d35', '#d4e4d9', '#161e26', '#161e26', '#213e32', '#32654a', '#52926b', '#82b68d'],
-}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import render_artwork
 
-def restyle(source, mode):
-    root = ET.fromstring(source)
-    root.set('viewBox', '-16 -24 880 152')
-    root.set('width', '880')
-    root.set('height', '152')
-    root.set('role', 'img')
-    root.set('aria-label', 'GitHub contributions for Bincode1')
-    title = ET.Element(NS+'title')
-    title.text = 'Bincode1 · GitHub contributions'
-    root.insert(0, title)
-    style = root.find(NS+'style')
-    if style is None:
-        raise ValueError('Expected snk SVG with its animation stylesheet.')
-    keys = ['cb', 'cs', 'ce', 'c0', 'c1', 'c2', 'c3', 'c4']
-    variables = ':root{'+''.join(f'--{k}:{v};' for k,v in zip(keys,PALETTES[mode]))+'}'
-    css = re.sub(r':root\{[^}]+\}', variables, style.text)
-    css = re.sub(r'\b\d+ms\b', '32000ms', css)
-    # Keep the actual contribution cells at their original coordinates, with
-    # softer corners. The lower collection meter is intentionally removed.
-    for parent in root.iter():
-        for child in list(parent):
-            classes = child.get('class', '').split()
-            if 'u' in classes:
-                parent.remove(child)
-            elif 'c' in classes:
-                child.set('rx', '2.5')
-                child.set('ry', '2.5')
-    # The contribution map is persistent; only the snake follows its route.
-    # Override the upstream per-cell fill animations without changing the
-    # original contribution-level fills or any snake keyframes.
-    css += '\n.c{animation:none!important}'
-    css += '\n@media(prefers-reduced-motion:reduce){.c,.s{animation:none!important}.s{display:none}}'
-    style.text = css
-    return ET.tostring(root, encoding='unicode')+'\n'
+
+class CalendarParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.cells = {}
+        self.tips = {}
+        self.current_tip = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'td' and 'data-date' in attrs and 'data-level' in attrs:
+            ident = attrs['id']
+            if ident in self.cells:
+                raise ValueError('Duplicate contribution day id')
+            self.cells[ident] = {'date': attrs['data-date'], 'level': int(attrs['data-level'])}
+        elif tag == 'tool-tip' and attrs.get('for', '').startswith('contribution-day-'):
+            self.current_tip = attrs['for']
+            self.tips[self.current_tip] = ''
+
+    def handle_data(self, data):
+        if self.current_tip is not None:
+            self.tips[self.current_tip] += data
+
+    def handle_endtag(self, tag):
+        if tag == 'tool-tip':
+            self.current_tip = None
+
+
+def parse_calendar(source):
+    parser = CalendarParser()
+    parser.feed(source)
+    days = []
+    for ident, cell in parser.cells.items():
+        tip = ' '.join(parser.tips.get(ident, '').split())
+        match = re.match(r'([\d,]+) contributions? on ', tip)
+        if tip.startswith('No contributions on '):
+            count = 0
+        elif match:
+            count = int(match[1].replace(',', ''))
+        else:
+            raise ValueError(f'Unrecognized public contribution count for {cell["date"]}: {tip!r}')
+        if not 0 <= cell['level'] <= 4 or (count == 0) != (cell['level'] == 0):
+            raise ValueError('Contribution count and intensity disagree')
+        date.fromisoformat(cell['date'])
+        days.append(dict(cell, count=count))
+    days.sort(key=lambda d: d['date'])
+    if not 365 <= len(days) <= 371:
+        raise ValueError(f'Expected a full public contribution year, got {len(days)} days')
+    for previous, current in zip(days, days[1:]):
+        if date.fromisoformat(current['date'])-date.fromisoformat(previous['date']) != timedelta(days=1):
+            raise ValueError('Public contribution dates must be unique and contiguous')
+    return days
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('source')
-    parser.add_argument('--generated-at', help='UTC time from the workflow that just fetched this source; omit when restyling an existing snapshot.')
+    parser.add_argument('source', nargs='?', help='Saved public-calendar HTML; omit to fetch without authentication')
+    parser.add_argument('--generated-at', help='Actual source fetch time; never advances when restyling a saved source')
     args = parser.parse_args(argv)
-    source = Path(args.source).read_text(encoding='utf-8')
-    out = ROOT / 'assets'
-    out.mkdir(exist_ok=True)
-    for mode in PALETTES:
-        (out / f'activity-{mode}.svg').write_text(restyle(source, mode), encoding='utf-8')
+    profile = json.loads((ROOT/'profile.json').read_text(encoding='utf-8'))
+    if args.source:
+        source = Path(args.source).read_text(encoding='utf-8')
+    else:
+        # No Authorization header or browser cookies: public contributions only.
+        request = Request(f'https://github.com/users/{profile["github_username"]}/contributions', headers={'User-Agent': 'Bincode1-profile-artwork', 'Accept-Language': 'en-US'})
+        with urlopen(request, timeout=45) as response:
+            source = response.read().decode('utf-8')
+        args.generated_at = datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z')
+    days = parse_calendar(source)
     if args.generated_at:
-        generated = datetime.fromisoformat(args.generated_at.replace('Z', '+00:00'))
-        if generated.tzinfo is None:
-            raise ValueError('Generation time must include a timezone.')
-        cells = [e for e in ET.fromstring(source).iter() if 'c' in e.get('class', '').split()]
+        stamp = datetime.fromisoformat(args.generated_at.replace('Z', '+00:00'))
+        if stamp.tzinfo is None:
+            raise ValueError('Generation time must include a timezone')
+    # Validate the complete response before replacing any generated asset.
+    render_artwork.ROOT = ROOT
+    render_artwork.write_activity(days)
+    if args.generated_at:
         metadata = {
             'generated_at': args.generated_at,
-            'source': 'GitHub public profile contribution calendar',
+            'source': 'GitHub public profile contribution calendar (unauthenticated)',
             'source_sha256': hashlib.sha256(source.encode('utf-8')).hexdigest(),
-            'days': len(cells),
-            'active_days': sum(len(e.get('class', '').split()) > 1 for e in cells),
+            'days': len(days),
+            'active_days': sum(d['count'] > 0 for d in days),
+            'total_contributions': sum(d['count'] for d in days),
+            'calendar': days,
         }
-        (out / 'activity.json').write_text(json.dumps(metadata, indent=2)+'\n', encoding='utf-8')
-    print('Saved dark and light activity SVGs; route and calendar preserved.')
+        (ROOT/'assets'/'activity.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    print(f'Saved public calendar: {len(days)} days, {sum(d["count"] for d in days)} contributions; dark/light and desktop/mobile artwork.')
+
 
 if __name__ == '__main__':
     main()

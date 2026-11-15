@@ -1,0 +1,49 @@
+name: Update profile artwork
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'profile.json'
+      - 'build_readme.py'
+      - 'assets/type/**'
+      - 'assets/icons/**'
+      - 'assets/avatar.jpg'
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-artwork-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check calendar parsing and profile links
+        run: python -m unittest discover -s tests -v
+      - name: Fetch public calendar and render artwork
+        run: |
+          python scripts/style_activity.py
+          python build_readme.py
+      - name: Commit updated artwork
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/activity*.svg assets/activity.json assets/profile README.md
+          git diff --cached --quiet && exit 0
+          git commit -m 'docs: update profile artwork'
+          git pull --rebase
+          git push
