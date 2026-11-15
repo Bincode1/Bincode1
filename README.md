@@ -1,58 +1,50 @@
-### Hello, 我是Bincode1! 👋
+### Hello, 我是 Bincode1! 👋
 
-<code><img height="26" src="https://raw.githubusercontent.com/github/explore/main/topics/java/java.png"></code>
-<code><img height="26" src="https://raw.githubusercontent.com/github/explore/main/topics/python/python.png"></code>
-<code><img height="26" src="https://raw.githubusercontent.com/github/explore/main/topics/vue/vue.png"></code>
+<p><img src="assets/icons/java.svg" width="36" height="36" alt="Java" title="Java">&nbsp;&nbsp;<img src="assets/icons/python.svg" width="36" height="36" alt="Python" title="Python">&nbsp;&nbsp;<img src="assets/icons/vue.svg" width="36" height="36" alt="Vue" title="Vue">&nbsp;&nbsp;<img src="assets/icons/typescript.svg" width="36" height="36" alt="TypeScript" title="TypeScript">&nbsp;&nbsp;<img src="assets/icons/fastapi.svg" width="36" height="36" alt="FastAPI" title="FastAPI">&nbsp;&nbsp;<img src="assets/icons/git.svg" width="36" height="36" alt="Git" title="Git">&nbsp;&nbsp;</p>
 
-[![visitor](https://visitor-badge.glitch.me/badge?page_id=bincode1.bincode1)](https://github.com/Bincode1)
-[![GitHub](https://img.shields.io/badge/github-Bincode1-181717)](https://github.com/Bincode1)
-[![one-text-code](https://img.shields.io/badge/project-one--text--code-blue)](https://github.com/Bincode1/one-text-code)
-[![BiliBrain-Python](https://img.shields.io/badge/project-BiliBrain--Python-orange)](https://github.com/Bincode1/BiliBrain-Python)
-
-<table width="800px">
-<tr>
-<td valign="top" width="50%">
-
-#### 👨‍💻 About Me
-
-<!-- code_time starts -->
+#### About me
 
 ```text
 一个还在持续学习的程序员。
-目前主要学习和实践 Java、Python 和 Vue 相关技术。
-希望通过 GitHub 持续记录项目、代码和成长过程。
-持续学习 Java、Python 和 Vue
-完善自己的项目作品和代码质量
-把想法逐步做成可以展示的真实项目
+主要学习和实践 Java、Python、Vue。
+最近在做 AI Agent、RAG 和网页生成。
 ```
 
-<!-- code_time ends -->
-</td>
+#### Projects
 
-<td valign="top" width="50%">
-
-#### 🚀 Featured Projects
-
-<!-- blog starts -->
-* <a href='https://github.com/Bincode1/one-text-code' target='_blank' title='one-text-code'>one-text-code</a> - 一个零代码网站生成平台，尝试把网页生成和搭建流程做得更简单、更直观。
-* <a href='https://github.com/Bincode1/BiliBrain-Python' target='_blank' title='BiliBrain-Python'>BiliBrain-Python</a> - 把 B 站收藏夹变成可检索、可总结、可追问的个人视频知识工作台，主打 Python 方向实践。
-* <a href='https://github.com/Bincode1/BiliBrain-Java' target='_blank' title='BiliBrain-Java'>BiliBrain-Java</a> - BiliBrain 的 Java 方向版本，目前作为后续持续完善和扩展的项目预留。
-<!-- blog ends -->
-
+<table width="100%">
+<tr>
+<td width="40" align="center"><img src="assets/icons/clapperboard.svg" width="30" height="30" alt=""></td>
+<td width="800">
+<a href="https://github.com/Bincode1/MediaMind"><strong>MediaMind</strong></a><br>
+把 B 站、YouTube 和本地音视频整理成资料库，支持转写、检索和带时间戳的问答。<br>
+<sub>Python · FastAPI · Vue · RAG</sub>
 </td>
 </tr>
-
+<tr>
+<td width="40" align="center"><img src="assets/icons/map.svg" width="30" height="30" alt=""></td>
+<td width="800">
+<a href="https://github.com/Bincode1/TravelPlanner"><strong>TravelPlanner</strong></a><br>
+多个 Agent 协作规划旅行，整合景点、酒店和天气，生成带地图的每日行程。<br>
+<sub>Python · LangGraph · Vue · TypeScript</sub>
+</td>
+</tr>
+<tr>
+<td width="40" align="center"><img src="assets/icons/code-xml.svg" width="30" height="30" alt=""></td>
+<td width="800">
+<a href="https://github.com/Bincode1/one-text-code"><strong>one-text-code</strong></a><br>
+零代码网页生成平台。<br>
+<sub>Vue · TypeScript · Vite</sub>
+</td>
+</tr>
 </table>
 
-<p>
-  <img
-  width="334"
-  src="https://github-readme-stats.vercel.app/api/top-langs/?username=bincode1&langs_count=8&layout=compact&bg_color=30,e96443,904e95&title_color=fff&text_color=fff"
-  />
-  <img
-  width="507"
-  src="https://github-readme-stats.vercel.app/api?username=Bincode1&show_icons=true&&theme=radical&layout=compact"
-  />
-</p>
+[全部项目 ↗](https://github.com/Bincode1?tab=repositories)
 
-![github contribution grid snake animation](https://github.com/Bincode1/Bincode1/blob/output/github-contribution-grid-snake.svg)
+#### Activity
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/activity-light.svg">
+  <img src="assets/activity-light.svg" width="100%" alt="Bincode1 的 GitHub 贡献图，使用柔和配色的贪吃蛇动画。">
+</picture>

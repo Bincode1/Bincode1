@@ -1,0 +1,50 @@
+[
+  {
+    "file": "java.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/java/java-original.svg",
+    "sha256": "7582e518a9c02425f97155e5a3bd39d1a3a7d421b78caf9c8df7443dad3edc5d"
+  },
+  {
+    "file": "python.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/python/python-original.svg",
+    "sha256": "71493b4a732f0532b3a03a7a95da3ee11a65766367c8303b901ffbe7bf91a3a2"
+  },
+  {
+    "file": "vue.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/vuejs/vuejs-original.svg",
+    "sha256": "4cc1153600c0845c645ac6c718c11d516d6899079a0dc406e3d62f68b1d02c49"
+  },
+  {
+    "file": "typescript.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/typescript/typescript-original.svg",
+    "sha256": "c9191199f4049920c2fc19035b8a6664f37f4689fcd9e8434e786097e78863f0"
+  },
+  {
+    "file": "fastapi.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/fastapi/fastapi-original.svg",
+    "sha256": "7ef41f6a363b00ff595e6d0b933c025c92cbfae29dc1df24b2f6eb8b476ee486"
+  },
+  {
+    "file": "git.svg",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/32fe1d3b3f36ad11f90ab94f7db59738139c2bf6/icons/git/git-original.svg",
+    "sha256": "717a57ea97bf7e86de721dab3e68afac66332a10676d5c9abce4ae6a5a9c9983"
+  },
+  {
+    "file": "clapperboard.svg",
+    "source": "https://raw.githubusercontent.com/lucide-icons/lucide/55782beff3a0133df79c417eb68f96e8f19e2404/icons/clapperboard.svg",
+    "modification": "Set stroke to GitHub blue #4493f8 for dark and light backgrounds.",
+    "sha256": "27b9196e46f2e9b11081c702f27209d61f90301c778d30d0bffcf6ed4a10a867"
+  },
+  {
+    "file": "map.svg",
+    "source": "https://raw.githubusercontent.com/lucide-icons/lucide/55782beff3a0133df79c417eb68f96e8f19e2404/icons/map.svg",
+    "modification": "Set stroke to GitHub blue #4493f8 for dark and light backgrounds.",
+    "sha256": "3a0fb41fa9db004b77f8ad3bec8fb43206e9edb66a020b947fe88e43e464e2cb"
+  },
+  {
+    "file": "code-xml.svg",
+    "source": "https://raw.githubusercontent.com/lucide-icons/lucide/55782beff3a0133df79c417eb68f96e8f19e2404/icons/code-xml.svg",
+    "modification": "Set stroke to GitHub blue #4493f8 for dark and light backgrounds.",
+    "sha256": "843489a8b9dea7a9abcbc850c3c968f83402153ddae4fa46e814e31612e6f1a3"
+  }
+]
