@@ -13,8 +13,8 @@ def build_readme(profile):
     rows = []
     for p in profile['featured_projects']:
         rows.append(f'''<tr>
-<td width="72" align="center"><img src="assets/icons/{escape(p['icon'])}.svg" width="30" height="30" alt=""></td>
 <td width="800">
+<img src="assets/icons/{escape(p['icon'])}.svg" width="20" height="20" align="absmiddle" alt="">&nbsp;
 <a href="{escape(p['url'], quote=True)}"><strong>{escape(p['name'])}</strong></a><br>
 {escape(p['description'])}<br>
 <sub>{escape(p['stack'])}</sub>

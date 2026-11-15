@@ -14,24 +14,24 @@
 
 <table width="100%">
 <tr>
-<td width="72" align="center"><img src="assets/icons/clapperboard.svg" width="30" height="30" alt=""></td>
 <td width="800">
+<img src="assets/icons/clapperboard.svg" width="20" height="20" align="absmiddle" alt="">&nbsp;
 <a href="https://github.com/Bincode1/MediaMind"><strong>MediaMind</strong></a><br>
 把 B 站、YouTube 和本地音视频整理成资料库，支持转写、检索和带时间戳的问答。<br>
 <sub>Python · FastAPI · Vue · RAG</sub>
 </td>
 </tr>
 <tr>
-<td width="72" align="center"><img src="assets/icons/map.svg" width="30" height="30" alt=""></td>
 <td width="800">
+<img src="assets/icons/map.svg" width="20" height="20" align="absmiddle" alt="">&nbsp;
 <a href="https://github.com/Bincode1/TravelPlanner"><strong>TravelPlanner</strong></a><br>
 多个 Agent 协作规划旅行，整合景点、酒店和天气，生成带地图的每日行程。<br>
 <sub>Python · LangGraph · Vue · TypeScript</sub>
 </td>
 </tr>
 <tr>
-<td width="72" align="center"><img src="assets/icons/code-xml.svg" width="30" height="30" alt=""></td>
 <td width="800">
+<img src="assets/icons/code-xml.svg" width="20" height="20" align="absmiddle" alt="">&nbsp;
 <a href="https://github.com/Bincode1/one-text-code"><strong>one-text-code</strong></a><br>
 零代码网页生成平台。<br>
 <sub>Vue · TypeScript · Vite</sub>
