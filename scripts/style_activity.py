@@ -43,6 +43,10 @@ def restyle(source, mode):
             elif 'c' in classes:
                 child.set('rx', '2.5')
                 child.set('ry', '2.5')
+    # The contribution map is persistent; only the snake follows its route.
+    # Override the upstream per-cell fill animations without changing the
+    # original contribution-level fills or any snake keyframes.
+    css += '\n.c{animation:none!important}'
     css += '\n@media(prefers-reduced-motion:reduce){.c,.s{animation:none!important}.s{display:none}}'
     style.text = css
     return ET.tostring(root, encoding='unicode')+'\n'
