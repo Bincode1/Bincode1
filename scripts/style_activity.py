@@ -1,5 +1,9 @@
 """Restyle a real snk output, keeping its calendar and computed snake route."""
 import re
+import argparse
+import hashlib
+import json
+from datetime import datetime
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -43,12 +47,29 @@ def restyle(source, mode):
     style.text = css
     return ET.tostring(root, encoding='unicode')+'\n'
 
-def main():
-    source = Path(sys.argv[1]).read_text(encoding='utf-8')
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source')
+    parser.add_argument('--generated-at', help='UTC time from the workflow that just fetched this source; omit when restyling an existing snapshot.')
+    args = parser.parse_args(argv)
+    source = Path(args.source).read_text(encoding='utf-8')
     out = ROOT / 'assets'
     out.mkdir(exist_ok=True)
     for mode in PALETTES:
         (out / f'activity-{mode}.svg').write_text(restyle(source, mode), encoding='utf-8')
+    if args.generated_at:
+        generated = datetime.fromisoformat(args.generated_at.replace('Z', '+00:00'))
+        if generated.tzinfo is None:
+            raise ValueError('Generation time must include a timezone.')
+        cells = [e for e in ET.fromstring(source).iter() if 'c' in e.get('class', '').split()]
+        metadata = {
+            'generated_at': args.generated_at,
+            'source': 'GitHub public profile contribution calendar',
+            'source_sha256': hashlib.sha256(source.encode('utf-8')).hexdigest(),
+            'days': len(cells),
+            'active_days': sum(len(e.get('class', '').split()) > 1 for e in cells),
+        }
+        (out / 'activity.json').write_text(json.dumps(metadata, indent=2)+'\n', encoding='utf-8')
     print('Saved dark and light activity SVGs; route and calendar preserved.')
 
 if __name__ == '__main__':

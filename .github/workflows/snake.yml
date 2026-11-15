@@ -8,13 +8,13 @@ on:
       - '.github/workflows/snake.yml'
       - 'scripts/style_activity.py'
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '17 * * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: profile-activity
+  group: profile-activity-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -32,12 +32,14 @@ jobs:
           github_user_name: ${{ github.repository_owner }}
           outputs: dist/raw-snake.svg
       - name: Apply profile artwork styles
-        run: python scripts/style_activity.py dist/raw-snake.svg
+        run: |
+          python scripts/style_activity.py dist/raw-snake.svg --generated-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          python build_readme.py
       - name: Commit artwork
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/activity-light.svg assets/activity-dark.svg
+          git add assets/activity-light.svg assets/activity-dark.svg assets/activity.json README.md
           git diff --cached --quiet && exit 0
           git commit -m 'docs: update contribution artwork'
           git pull --rebase

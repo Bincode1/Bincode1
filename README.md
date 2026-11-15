@@ -43,6 +43,8 @@
 
 #### Activity
 
+<sub>更新于 2026-11-15 13:21（UTC+8） · 每小时自动刷新</sub>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/activity-light.svg">
