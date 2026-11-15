@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320" role="img" aria-labelledby="title desc">
+  <title id="title">Hi, I'm Bincode1.</title>
+  <desc id="desc">小想法，慢慢做成真。</desc>
+  <rect width="600" height="320" rx="6" fill="#f5f0e6"/>
+  <text x="28" y="48" fill="#254c3d" font-family="'Courier New',monospace" font-size="18" letter-spacing="1.5">HELLO, INTERNET</text>
+  <g transform="translate(532 59) rotate(10)">
+    <circle r="38" fill="#b84e2d"/>
+    <text x="0" y="9" text-anchor="middle" fill="#fff7e9" font-family="Georgia,'Times New Roman',serif" font-size="27" font-style="italic">hi :)</text>
+  </g>
+  <text x="24" y="164" fill="#254c3d" font-family="Georgia,'Times New Roman',serif" font-size="90" font-weight="bold" letter-spacing="-4">Bincode1</text>
+  <text x="30" y="224" fill="#254c3d" font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif" font-size="30">小想法，慢慢做成真。</text>
+  <path d="M30 263H570" stroke="#c9c9b9"/>
+  <text x="30" y="298" fill="#53634e" font-family="'Courier New',monospace" font-size="21">agents / tools / experiments</text>
+</svg>
